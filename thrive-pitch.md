@@ -65,6 +65,42 @@ Ahmed's story demonstrates how Thrive adapts to any young adult's unique circums
 
 ---
 
+## ✅ Azure Resources in Your Diagram + FinwiseOS Usage
+
+| Azure Resource | Role in FinwiseOS |
+|----------------|-------------------|
+| Application Gateway + WAF | Entry point for all traffic (frontend + API); applies Web Application Firewall rules |
+| App Service (Next.js frontend) | Hosts the FinwiseOS user interface (React/Next.js), deployed behind the gateway |
+| App Service (Agent & App APIs) | Hosts backend APIs including agent orchestrator and smaller AI agents (FastAPI) |
+| App Service integration subnet | Isolates app services in a private subnet to restrict public access |
+| Azure Cosmos DB | Used to store structured data like user_state, quests, xp_logs, trust_flags |
+| Azure Redis Cache | Speeds up access to session tokens, user memory fragments, and LLM prompt chains |
+| Azure Key Vault | Securely stores API keys, LLM credentials, health sync tokens, OAuth secrets |
+| Azure Machine Learning | Optional: Hosts custom models (e.g., for embeddings or agent-level inference) |
+| Managed Online Endpoint (ML) | Endpoint for inferencing hosted ML models (e.g., prompt tuning or emotion scoring) |
+| Compute Instances (private subnet) | Hosts Qdrant (vector memory), or open-source LLMs like llama.cpp if self-hosted |
+| Azure Storage | Stores logs, backups, session exports, and user-submitted attachments |
+| Azure AI Search | Optional: Used for RAG (retrieval-augmented generation) if browsing financial content |
+| Azure OpenAI Service | Handles core LLM prompts for goal parsing, tone writing, adaptive dialog |
+| Azure Container Registry | Stores containerized agent images deployed via App Service or AKS |
+| Log Analytics Workspace | Tracks metrics, agent errors, trust-related events, and system health logs |
+| Diagnostics Settings | Sends logs from WAF, App Service, ML, and Key Vault to central monitoring |
+| Managed Identity | Grants App Services and ML resources access to Key Vault without exposing credentials |
+| Private Endpoints | Secure connection to Cosmos DB, Redis, Key Vault, Storage, etc. without public IPs |
+| Subnets + NSGs | Segregate services into logical units (e.g. frontend, backend, data) and apply firewall rules |
+| Jump Boxes / Build Agents | For secure SSH/RDP access to VMs or for CI/CD deployments (e.g., GitHub runners) |
+| Hub Virtual Network | Central VNET enabling communication between workloads via peering |
+| User Defined Routes (UDR) | Routes traffic from spoke to hub securely, ensuring all egress flows through firewalls |
+| Spoke Virtual Network | Workload-specific subnet for FinwiseOS, peered to hub |
+| Azure Firewall / DDoS Protection | Protects backend systems from unauthorized access and mitigates large-scale attacks |
+| Azure Bastion | Secure remote access to private subnets (e.g. to admin Qdrant or containers) |
+| Cost Management / Policy Assignments | Manages resource quotas, budget alerts, and compliance rules |
+| Defender for Cloud | Monitors security posture, alerts on misconfigurations or threat signals |
+| Role Assignments | Controls access to APIs, storage, and sensitive agent operations via RBAC |
+
+---
+
+
 ## 🔜 Future Improvements & Accessibility
 
 As we continue developing Thrive, we're committed to making it accessible and inclusive for all users. Our upcoming improvements include:
