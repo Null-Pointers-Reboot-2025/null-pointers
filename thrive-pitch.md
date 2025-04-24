@@ -1,5 +1,5 @@
 ## 🧠 One-Line Summary
-**FinWise** is an agentic AI-powered task manager that turns wellbeing, life goals, and financial intentions into personalised, adaptive micro-tasks — helping users move forward at their own pace with compassion and clarity.
+**Thrive** is an agentic AI-powered task manager that turns wellbeing, life goals, and financial intentions into personalised, adaptive micro-tasks — helping users move forward at their own pace with compassion and clarity.
 
 ---
 

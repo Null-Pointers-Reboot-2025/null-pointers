@@ -1,6 +1,6 @@
 # Thrive: A Digital Wellbeing & Life Skills Platform for Young Adults
 
-Thrive is a comprehensive digital platform designed to support young adults (18-25) in the UK as they navigate the transition to independence. The platform combines digital tools with community support to address key challenges including mental health, financial literacy, and life skills development.
+Thrive is a comprehensive digital platform designed to support young adults in the UK as they navigate the transition to independence. The platform combines digital tools with community support to address key challenges including mental health, financial literacy, and life skills development.
 
 ## Core Components:
 
