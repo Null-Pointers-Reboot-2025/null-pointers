@@ -23,13 +23,13 @@ app.add_middleware(
 )
 
 class PingPayload(BaseModel):
-    data: str
+    message: str
 
 @app.post("/api/ping")
 async def ping(payload: PingPayload):
-    print(f"Received: {payload.data}")
+    print(f"Received: {payload.message}")
 
-    return {"message": get_me_a_completion(payload.data)}
+    return {"message": get_me_a_completion(payload.message)}
 
 
 
@@ -44,13 +44,12 @@ def get_me_a_completion(message: str):
     #Prepare the chat prompt 
     chat_prompt = [
         {
+            "role": "system",
+            "content": "You are a chatbot for a financial advice company"
+        },
+        {
             "role": "user",
-            "content": [
-                {
-                    "type": "text",
-                    "text": message
-                }
-            ]
+            "content": message,
         }
     ] 
         
