@@ -48,13 +48,13 @@ const StatProgressBar: React.FC<StatProgressBarProps> = ({
       }
     } else {
       switch (color) {
-        case 'purple': return theme === 'Light Mode' ? 'bg-purple-400' : 'bg-purple-500';
-        case 'blue': return theme === 'Light Mode' ? 'bg-blue-400' : 'bg-blue-500';
-        case 'teal': return theme === 'Light Mode' ? 'bg-teal-400' : 'bg-teal-500';
-        case 'amber': return theme === 'Light Mode' ? 'bg-amber-400' : 'bg-amber-500';
-        case 'red': return theme === 'Light Mode' ? 'bg-red-400' : 'bg-red-500';
-        case 'green': return theme === 'Light Mode' ? 'bg-green-400' : 'bg-green-500';
-        default: return theme === 'Light Mode' ? 'bg-blue-400' : 'bg-blue-500';
+        case 'purple': return 'bg-purple-400';
+        case 'blue': return 'bg-blue-400';
+        case 'teal': return 'bg-teal-400';
+        case 'amber': return 'bg-amber-400';
+        case 'red': return 'bg-red-400';
+        case 'green': return 'bg-green-400';
+        default: return 'bg-blue-400';
       }
     }
   };
@@ -93,7 +93,7 @@ const StatProgressBar: React.FC<StatProgressBarProps> = ({
           )}
         </div>
       )}
-      <div className={`${getBarHeight()} ${theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-800'} rounded-full overflow-hidden`}>
+      <div className={`${getBarHeight()} bg-slate-200 rounded-full overflow-hidden`}>
         <div 
           className={`h-full ${getBarColor()}`}
           style={{ width: `${percentage}%` }}

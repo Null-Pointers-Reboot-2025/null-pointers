@@ -125,7 +125,7 @@ const QuestItem: React.FC<QuestItemProps> = ({ quest, completeQuest }) => {
                 </button>
               )}
               {quest.status === 'completed' && (
-                <span className={`hidden md:block bg-green-900/30 ${theme === 'Light Mode' ? 'text-green-700' : 'text-green-400'} text-sm px-3 py-1 rounded`}>
+                <span className={`hidden md:block bg-green-900/30 text-green-700 text-sm px-3 py-1 rounded`}>
                   Completed
                 </span>
               )}

@@ -35,12 +35,12 @@ export const ProgressHistoryTable: React.FC<ProgressHistoryTableProps> = ({
           </thead>
           <tbody>
             {statHistory.map((period, index) => (
-              <tr key={index} className={`border-t ${theme === 'Light Mode' ? 'border-slate-200' : 'border-gray-700'}`}>
+              <tr key={index} className={`border-t border-slate-200`}>
                 <td className="py-3 pr-4 font-bold text-black">{period.period}</td>
                 <td className="py-3 pr-4">
                   <div className="flex items-center">
                     <span className="w-8 font-bold text-purple-900">{period.physical}%</span>
-                    <div className={`ml-2 w-16 h-2 ${theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-800'} rounded-full overflow-hidden`}>
+                    <div className={`ml-2 w-16 h-2 bg-slate-200 rounded-full overflow-hidden`}>
                       <div 
                         className="h-full bg-purple-700"
                         style={{ width: `${period.physical}%` }}
@@ -51,7 +51,7 @@ export const ProgressHistoryTable: React.FC<ProgressHistoryTableProps> = ({
                 <td className="py-3 pr-4">
                   <div className="flex items-center">
                     <span className="w-8 font-bold text-blue-900">{period.mental}%</span>
-                    <div className={`ml-2 w-16 h-2 ${theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-800'} rounded-full overflow-hidden`}>
+                    <div className={`ml-2 w-16 h-2 bg-slate-200 rounded-full overflow-hidden`}>
                       <div 
                         className="h-full bg-blue-700"
                         style={{ width: `${period.mental}%` }}
@@ -62,7 +62,7 @@ export const ProgressHistoryTable: React.FC<ProgressHistoryTableProps> = ({
                 <td className="py-3 pr-4">
                   <div className="flex items-center">
                     <span className="w-8 font-bold text-teal-900">{period.emotional}%</span>
-                    <div className={`ml-2 w-16 h-2 ${theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-800'} rounded-full overflow-hidden`}>
+                    <div className={`ml-2 w-16 h-2 bg-slate-200 rounded-full overflow-hidden`}>
                       <div 
                         className="h-full bg-teal-700"
                         style={{ width: `${period.emotional}%` }}
@@ -73,7 +73,7 @@ export const ProgressHistoryTable: React.FC<ProgressHistoryTableProps> = ({
                 <td className="py-3">
                   <div className="flex items-center">
                     <span className="w-8 font-bold text-amber-900">{period.overall}%</span>
-                    <div className={`ml-2 w-16 h-2 ${theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-800'} rounded-full overflow-hidden`}>
+                    <div className={`ml-2 w-16 h-2 bg-slate-200 rounded-full overflow-hidden`}>
                       <div 
                         className="h-full bg-amber-700"
                         style={{ width: `${period.overall}%` }}
@@ -92,10 +92,7 @@ export const ProgressHistoryTable: React.FC<ProgressHistoryTableProps> = ({
           {insights.map((insight, index) => (
             <div 
               key={index} 
-              className={`p-3 border ${theme === 'Light Mode' 
-                ? 'border-slate-300 bg-slate-100' 
-                : 'border-gray-700 bg-gray-800/50'
-              } rounded-lg`}
+              className={`p-3 border border-slate-300 bg-slate-100 rounded-lg`}
             >
               <p className="text-sm">
                 <span className="font-bold text-black">

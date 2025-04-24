@@ -43,7 +43,7 @@ const MasteryInsightCard: React.FC<MasteryInsightCardProps> = ({
   };
   
   const getPointColor = (color?: string) => {
-    if (!color) return theme === 'Light Mode' ? 'bg-slate-500' : 'bg-gray-400';
+    if (!color) return 'bg-slate-500';
     
     switch (color) {
       case 'purple': return 'bg-purple-500';
@@ -57,7 +57,7 @@ const MasteryInsightCard: React.FC<MasteryInsightCardProps> = ({
   };
 
   return (
-    <div className={`p-3 border ${theme === 'Light Mode' ? 'border-slate-300' : 'border-gray-700'} rounded-lg`}>
+    <div className={`p-3 border border-slate-300 rounded-lg`}>
       <h3 className="text-black font-bold">{title}</h3>
       
       {/* Progress indicator if provided */}
@@ -66,7 +66,7 @@ const MasteryInsightCard: React.FC<MasteryInsightCardProps> = ({
           <p className="text-lg mt-1 font-medium text-gray-900">{progressLabel}</p>
           {progressMax && (
             <>
-              <div className={`h-2 ${theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-700'} rounded-full overflow-hidden mt-2`}>
+              <div className={`h-2 bg-slate-200 rounded-full overflow-hidden mt-2`}>
                 <div 
                   className="h-full bg-gray-900"
                   style={{ width: `${(progressValue / progressMax) * 100}%` }}

@@ -52,7 +52,7 @@ const WeeklyGoalItem: React.FC<WeeklyGoalItemProps> = ({ goal }) => {
       </div>
       
       {/* Progress Bar */}
-      <div className={`w-full ${theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-700'} rounded-full h-2.5 mt-2`}>
+      <div className={`w-full bg-slate-200 rounded-full h-2.5 mt-2`}>
         <div 
           className="bg-blue-600 h-2.5 rounded-full" 
           style={{ width: `${goal.progress}%` }}
@@ -63,7 +63,7 @@ const WeeklyGoalItem: React.FC<WeeklyGoalItemProps> = ({ goal }) => {
         <span className={`${getThemeClasses('text')} text-xs`}>
           {Math.ceil(goal.requiredQuestCount * (goal.progress / 100))}/{goal.requiredQuestCount} Quests
         </span>
-        <span className={`${theme === 'Light Mode' ? 'bg-slate-200 text-slate-700' : 'bg-gray-700 text-white'} text-xs px-2 py-1 rounded font-medium`}>Weekly Goal</span>
+        <span className={`bg-slate-200 text-slate-700 text-xs px-2 py-1 rounded font-medium`}>Weekly Goal</span>
       </div>
     </div>
   );

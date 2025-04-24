@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 import { Theme, themes } from '../themes';
 
 interface ThemeContextType {
@@ -10,32 +10,13 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    return savedTheme && themes[savedTheme] ? savedTheme : 'Lloyds Bank';
-  });
+  // Always use Lloyds Bank theme
+  const theme: Theme = 'Lloyds Bank';
 
-  useEffect(() => {
-    localStorage.setItem('theme', theme);
-    const config = themes[theme];
-    const root = document.documentElement;
-    
-    // Remove any existing theme classes
-    root.classList.remove(
-      'bg-gray-950', 'bg-stone-950', 'bg-slate-50',
-      'text-gray-200', 'text-amber-100', 'text-slate-800',
-      'font-medieval'
-    );
-    
-    // Apply new theme classes
-    root.classList.add(
-      config.colors.background,
-      config.colors.text,
-      config.fonts.body
-    );
-    
-    root.setAttribute('data-theme', theme);
-  }, [theme]);
+  // setTheme is a no-op since we only have one theme
+  const setTheme = (_theme: Theme) => {
+    // No-op, we always use Lloyds Bank theme
+  };
 
   const getThemeClasses = (component: 'card' | 'button' | 'input' | 'progressBar' | 'text' | 'background' | 'surface' | 'border' | 'primary' | 'textSecondary' | 'heading') => {
     const config = themes[theme];

@@ -6,7 +6,7 @@ const QuestHeader: React.FC = () => {
 
   return (
     <header className={`${getThemeClasses('surface')} p-4 border-b ${getThemeClasses('border')} text-center`}>
-      <h1 className={`text-black dark:text-black ${getThemeClasses('heading')} text-xl`}>FinwiseOS Quest Log</h1>
+      <h1 className={`text-black dark:text-black ${getThemeClasses('heading')} text-xl`}>Thrive Quest Log</h1>
     </header>
   );
 };

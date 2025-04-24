@@ -1,14 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 
 const Home: React.FC = () => {
   const { getThemeClasses } = useTheme();
+  const navigate = useNavigate();
+
+  const handleHelpClick = () => {
+    // Clear any existing help request state first
+    sessionStorage.removeItem('helpRequest');
+    // Set the pre-filled message for the chat page
+    sessionStorage.setItem('helpRequest', 'I need help now');
+    // Navigate to the chat page
+    navigate('/chat');
+  };
 
   return (
     <div className="min-h-screen bg-white text-black flex flex-col items-center justify-center p-6">
       <div className="text-center">
-        <h1 className="text-4xl font-semibold text-green-600 mb-2">FinwiseOS</h1>
+        <h1 className="text-4xl font-semibold text-green-600 mb-2">Thrive</h1>
         <p className="text-gray-700 mb-8">Your personal growth operating system</p>
         
         <div className="space-y-4 max-w-md mx-auto">
@@ -131,6 +141,15 @@ const Home: React.FC = () => {
               />
             </svg>
           </Link>
+          
+          {/* Help Button with Green Border */}
+          <button
+            onClick={handleHelpClick}
+            className="relative flex items-center justify-center bg-green-50 p-3 rounded-lg shadow-md border border-gray-200 w-full hover:border-green-500 hover:bg-green-100 transition-colors"
+          >
+            <div className="absolute inset-1 rounded-md border-2 border-green-400 pointer-events-none"></div>
+            <span className="text-base font-medium text-black-800">I need help now</span>
+          </button>
         </div>
         
         <div className="mt-12 text-gray-700 text-sm">

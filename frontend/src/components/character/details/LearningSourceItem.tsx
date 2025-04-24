@@ -20,7 +20,7 @@ export const LearningSourceItem: React.FC<LearningSourceItemProps> = ({
   const { theme } = useTheme();
   
   return (
-    <div className={`flex justify-between items-center p-3 border ${theme === 'Light Mode' ? 'border-slate-300' : 'border-gray-700'} rounded-lg`}>
+    <div className={`flex justify-between items-center p-3 border border-slate-300 rounded-lg`}>
       <div>
         <h3 className="font-bold text-black">{source.name}</h3>
         <div className="flex mt-1">

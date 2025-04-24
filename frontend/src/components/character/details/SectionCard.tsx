@@ -24,10 +24,10 @@ const SectionCard: React.FC<SectionCardProps> = ({
     if (!color) return getThemeClasses('border');
     
     switch (color) {
-      case 'purple': return theme === 'Light Mode' ? 'border-purple-300' : 'border-purple-500/30';
-      case 'blue': return theme === 'Light Mode' ? 'border-blue-300' : 'border-blue-500/30';
-      case 'teal': return theme === 'Light Mode' ? 'border-teal-300' : 'border-teal-500/30';
-      case 'amber': return theme === 'Light Mode' ? 'border-amber-300' : 'border-amber-500/30';
+      case 'purple': return 'border-purple-300';
+      case 'blue': return 'border-blue-300';
+      case 'teal': return 'border-teal-300';
+      case 'amber': return 'border-amber-300';
       default: return getThemeClasses('border');
     }
   };
@@ -36,10 +36,10 @@ const SectionCard: React.FC<SectionCardProps> = ({
     if (!color || !withAccentBg) return '';
     
     switch (color) {
-      case 'purple': return theme === 'Light Mode' ? 'bg-purple-50' : 'bg-purple-500/5';
-      case 'blue': return theme === 'Light Mode' ? 'bg-blue-50' : 'bg-blue-500/5';
-      case 'teal': return theme === 'Light Mode' ? 'bg-teal-50' : 'bg-teal-500/5';
-      case 'amber': return theme === 'Light Mode' ? 'bg-amber-50' : 'bg-amber-500/5';
+      case 'purple': return 'bg-purple-50';
+      case 'blue': return 'bg-blue-50';
+      case 'teal': return 'bg-teal-50';
+      case 'amber': return 'bg-amber-50';
       default: return '';
     }
   };

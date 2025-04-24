@@ -24,10 +24,7 @@ export const LevelProgressCard: React.FC<LevelProgressCardProps> = ({
   const { theme } = useTheme();
   
   return (
-    <div className={`rounded-lg p-4 border ${theme === 'Light Mode' 
-      ? `border-${accentColor}-200 bg-${accentColor}-50` 
-      : `border-${accentColor}-500/30 bg-${accentColor}-500/5`
-    } ${className}`}>
+    <div className={`rounded-lg p-4 border border-${accentColor}-200 bg-${accentColor}-50 ${className}`}>
       <div className="flex items-center mb-2">
         <h2 className="font-bold text-black text-lg">
           Level {levelData.level}
@@ -51,10 +48,7 @@ export const LevelProgressCard: React.FC<LevelProgressCardProps> = ({
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className={`border ${theme === 'Light Mode' 
-          ? `border-${accentColor}-200` 
-          : `border-${accentColor}-500/20`
-        } rounded-lg p-3`}>
+        <div className={`border border-${accentColor}-200 rounded-lg p-3`}>
           <h3 className="text-black font-bold mb-2">
             Level {levelData.level} Perks
           </h3>
@@ -69,10 +63,7 @@ export const LevelProgressCard: React.FC<LevelProgressCardProps> = ({
         </div>
         
         {strategies && (
-          <div className={`border ${theme === 'Light Mode' 
-            ? `border-${accentColor}-200` 
-            : `border-${accentColor}-500/20`
-          } rounded-lg p-3`}>
+          <div className={`border border-${accentColor}-200 rounded-lg p-3`}>
             <h3 className="text-black font-bold mb-2">
               Level Up Strategy
             </h3>

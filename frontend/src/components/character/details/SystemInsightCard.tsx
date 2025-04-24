@@ -41,7 +41,7 @@ export const SystemInsightCard: React.FC<SystemInsightCardProps> = ({
   };
   
   return (
-    <div className={`p-3 border ${theme === 'Light Mode' ? 'border-gray-300' : 'border-gray-700'} rounded-lg`}>
+    <div className={`p-3 border border-gray-300 rounded-lg`}>
       <h3 className="text-black font-bold">
         {metric.title}
       </h3>

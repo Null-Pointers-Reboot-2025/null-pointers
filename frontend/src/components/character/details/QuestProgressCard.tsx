@@ -17,7 +17,7 @@ const QuestProgressCard: React.FC<QuestProgressCardProps> = ({ stat, completed, 
   const isGoodProgress = completed / total >= 0.7;
 
   return (
-    <div className={`p-3 border ${theme === 'Light Mode' ? 'border-slate-300' : 'border-gray-700'} rounded-lg`}>
+    <div className={`p-3 border border-slate-300 rounded-lg`}>
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-black font-bold">{stat}</h3>
         <span className="font-bold text-black">

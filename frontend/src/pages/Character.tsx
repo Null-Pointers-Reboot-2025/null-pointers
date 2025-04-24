@@ -234,7 +234,7 @@ const Character: React.FC = () => {
           <h1 className={`${theme === 'Lloyds Bank' ? 'text-black' : getThemeClasses('primary')} ${getThemeClasses('heading')} text-xl font-bold`}>Character Stats</h1>
           <div className="flex items-center space-x-1">
             <span className={`${theme === 'Lloyds Bank' ? 'text-black' : getThemeClasses('primary')} ${getThemeClasses('heading')} text-lg font-bold`}>Lv.{level}</span>
-            <div className={`w-16 h-4 ${theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-800'} rounded-full overflow-hidden ml-2`}>
+            <div className={`w-16 h-4 bg-slate-200 rounded-full overflow-hidden ml-2`}>
               <div 
                 className={`h-full bg-gradient-to-r ${getThemeClasses('primary')} from-amber-500 to-amber-400`}
                 style={{ width: `${progressToNextLevel}%` }}
@@ -261,7 +261,7 @@ const Character: React.FC = () => {
             </div>
             <div className="text-right">
               <div className={`${theme === 'Lloyds Bank' ? 'text-black font-semibold' : getThemeClasses('textSecondary')} text-sm mb-1`}>Overall Progress</div>
-              <div className={`w-40 h-3 ${theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-800'} rounded-full overflow-hidden`}>
+              <div className={`w-40 h-3 bg-slate-200 rounded-full overflow-hidden`}>
                 <div 
                   className={`h-full bg-gradient-to-r ${getThemeClasses('primary')} from-blue-600 to-purple-600`}
                   style={{ width: `${Math.round(totalXP / 100)}%` }}
@@ -303,7 +303,7 @@ const Character: React.FC = () => {
                         <div className={`${theme === 'Lloyds Bank' ? 'text-black font-semibold' : getThemeClasses('textSecondary')} text-sm`}>{stat.xp} XP</div>
                       </div>
                     </div>
-                    <div className={`h-2 ${theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-800'} rounded-full overflow-hidden`}>
+                    <div className={`h-2 bg-slate-200 rounded-full overflow-hidden`}>
                       <div 
                         className={`h-full bg-gradient-to-r ${getCategoryColorClass(category.color)}`}
                         style={{ width: `${stat.value}%` }}

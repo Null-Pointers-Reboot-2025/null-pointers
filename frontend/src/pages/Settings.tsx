@@ -9,9 +9,22 @@ interface SettingsSection {
   description: string;
 }
 
+interface ConnectedApp {
+  id: string;
+  name: string;
+  icon: string;
+  connected: boolean;
+  description: string;
+}
+
+// Type for import sources
+type ImportSource = 'todoist' | 'asana' | 'trello' | 'microsoft' | 'google' | 'csv' | null;
+
 const Settings: React.FC = () => {
   const { theme, setTheme, getThemeClasses } = useTheme();
   const [activeSection, setActiveSection] = useState('profile');
+  const [importModalOpen, setImportModalOpen] = useState(false);
+  const [selectedImportSource, setSelectedImportSource] = useState<ImportSource>(null);
   const [userSettings, setUserSettings] = useState({
     profile: {
       username: '',
@@ -38,8 +51,85 @@ const Settings: React.FC = () => {
       experimentalAgents: false,
       healthData: false,
       modelVersion: 'default'
+    },
+    accessibility: {
+      highContrast: false,
+      largerText: false,
+      reducedMotion: false,
+      screenReader: false,
+      colorBlindMode: 'none'
+    },
+    privacy: {
+      connectedApps: [] as string[],
+      dataSaving: true
     }
   });
+
+  const [connectedApps, setConnectedApps] = useState<ConnectedApp[]>([
+    {
+      id: 'lloyds',
+      name: 'Lloyds Bank',
+      icon: '🏦',
+      connected: false,
+      description: 'Connect your Lloyds Bank account for financial insights'
+    },
+    {
+      id: 'fitbit',
+      name: 'Fitbit',
+      icon: '⌚',
+      connected: false,
+      description: 'Sync your Fitbit fitness data'
+    },
+    {
+      id: 'samsung_health',
+      name: 'Samsung Health',
+      icon: '💙',
+      connected: false,
+      description: 'Connect to Samsung Health for activity and health data'
+    },
+    {
+      id: 'apple_health',
+      name: 'Apple Health',
+      icon: '❤️',
+      connected: false,
+      description: 'Sync your Apple Health data'
+    },
+    {
+      id: 'strava',
+      name: 'Strava',
+      icon: '🏃',
+      connected: false,
+      description: 'Connect to Strava for running and cycling data'
+    },
+    {
+      id: 'headspace',
+      name: 'Headspace',
+      icon: '🧘',
+      connected: false,
+      description: 'Connect to Headspace for meditation and mindfulness data'
+    },
+    {
+      id: 'garmin',
+      name: 'Garmin',
+      icon: '⌚',
+      connected: false,
+      description: 'Sync your Garmin fitness and activity data'
+    },
+    {
+      id: 'google_calendar',
+      name: 'Google Calendar',
+      icon: '📅',
+      connected: false,
+      description: 'Sync your schedule and events from Google Calendar'
+    },
+    {
+      id: 'microsoft_calendar',
+      name: 'Microsoft Calendar',
+      icon: '📆',
+      connected: false,
+      description: 'Connect to Microsoft Calendar for schedule integration'
+    }
+  ]);
 
   const sections: SettingsSection[] = [
     {
@@ -65,6 +155,12 @@ const Settings: React.FC = () => {
       title: 'Assistant Behavior',
       icon: '🧠',
       description: 'Customize how your AI assistant interacts with you'
+    },
+    {
+      id: 'accessibility',
+      title: 'Accessibility',
+      icon: '♿',
+      description: 'Configure accessibility options for a better experience'
     },
     {
       id: 'advanced',
@@ -111,6 +207,49 @@ const Settings: React.FC = () => {
       appearance: { ...prev.appearance, theme: newTheme }
     }));
     setTheme(newTheme);
+  };
+
+  const toggleAppConnection = (appId: string) => {
+    setConnectedApps(prevApps => 
+      prevApps.map(app => 
+        app.id === appId ? { ...app, connected: !app.connected } : app
+      )
+    );
+    
+    // Update the connected apps list in userSettings
+    setUserSettings(prev => {
+      const updatedConnectedApps = [...prev.privacy.connectedApps];
+      const app = connectedApps.find(app => app.id === appId);
+      
+      if (app) {
+        if (!app.connected) {
+          // App is being connected, add to list
+          updatedConnectedApps.push(appId);
+        } else {
+          // App is being disconnected, remove from list
+          const index = updatedConnectedApps.indexOf(appId);
+          if (index > -1) updatedConnectedApps.splice(index, 1);
+        }
+      }
+      
+      return {
+        ...prev,
+        privacy: {
+          ...prev.privacy,
+          connectedApps: updatedConnectedApps
+        }
+      };
+    });
+  };
+
+  const handleImport = (source: ImportSource) => {
+    setSelectedImportSource(source);
+    setImportModalOpen(true);
+  };
+
+  const closeImportModal = () => {
+    setImportModalOpen(false);
+    setSelectedImportSource(null);
   };
 
   const renderProfileSection = () => (
@@ -191,32 +330,12 @@ const Settings: React.FC = () => {
   );
 
   const renderAppearanceSection = () => {
-    const getThemePreviewClasses = (previewTheme: Theme) => {
-      const previewConfig = themes[previewTheme];
-      return {
-        background: previewConfig.colors.background,
-        surface: previewConfig.colors.surface,
-        text: previewConfig.colors.text,
-        primary: previewConfig.colors.primary,
-        border: previewConfig.colors.border
-      };
-    };
-    
     return (
       <div className="space-y-6">
         <div>
-          <label className={`block text-sm ${getThemeClasses('heading')} text-black mb-2`}>
-            Theme
-          </label>
-          <select
-            value={userSettings.appearance.theme}
-            onChange={(e) => handleThemeChange(e.target.value as Theme)}
-            className={`w-full ${getThemeClasses('input')} text-black`}
-          >
-            <option value="System Blue">System Blue</option>
-            <option value="rpg">RPG Style</option>
-            <option value="Light Mode">Light Mode</option>
-          </select>
+          <p className={`text-sm ${getThemeClasses('heading')} text-black mb-4`}>
+            Using the Lloyds Bank theme
+          </p>
           
           {/* Theme Preview */}
           <div className="mt-4">
@@ -226,7 +345,7 @@ const Settings: React.FC = () => {
                 <div className="flex items-center">
                   <span className="mr-2">🧬</span>
                   <span className={`${getThemeClasses('heading')} text-black`}>
-                    {userSettings.appearance.theme === 'rpg' ? 'Your Character Stats' : 'Character Stats'}
+                    Character Stats
                   </span>
                 </div>
               </div>
@@ -270,7 +389,7 @@ const Settings: React.FC = () => {
 
       <div className="flex items-center justify-between">
         <label className={`text-sm text-black`}>Notifications</label>
-        <div className={`relative inline-block w-12 h-6 rounded-full ${userSettings.appearance.theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-700'}`}>
+        <div className={`relative inline-block w-12 h-6 rounded-full bg-slate-200`}>
           <input
             type="checkbox"
             className="sr-only"
@@ -282,7 +401,7 @@ const Settings: React.FC = () => {
           />
           <div
             className={`absolute left-1 top-1 w-4 h-4 rounded-full transition-transform transform ${
-              userSettings.dailyFlow.notifications ? 'translate-x-6 bg-blue-500' : userSettings.appearance.theme === 'Light Mode' ? 'bg-slate-400' : 'bg-gray-400'
+              userSettings.dailyFlow.notifications ? 'translate-x-6 bg-green-600' : 'bg-slate-400'
             }`}
           />
         </div>
@@ -308,7 +427,7 @@ const Settings: React.FC = () => {
 
       <div className="flex items-center justify-between">
         <label className={`text-sm text-black`}>Auto-reset at Midnight</label>
-        <div className={`relative inline-block w-12 h-6 rounded-full ${userSettings.appearance.theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-700'}`}>
+        <div className={`relative inline-block w-12 h-6 rounded-full bg-slate-200`}>
           <input
             type="checkbox"
             className="sr-only"
@@ -320,7 +439,7 @@ const Settings: React.FC = () => {
           />
           <div
             className={`absolute left-1 top-1 w-4 h-4 rounded-full transition-transform transform ${
-              userSettings.dailyFlow.autoReset ? 'translate-x-6 bg-blue-500' : userSettings.appearance.theme === 'Light Mode' ? 'bg-slate-400' : 'bg-gray-400'
+              userSettings.dailyFlow.autoReset ? 'translate-x-6 bg-green-600' : 'bg-slate-400'
             }`}
           />
         </div>
@@ -364,7 +483,7 @@ const Settings: React.FC = () => {
 
       <div className="flex items-center justify-between">
         <label className={`text-sm text-black`}>Emotional Intelligence Mode</label>
-        <div className={`relative inline-block w-12 h-6 rounded-full ${userSettings.appearance.theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-700'}`}>
+        <div className={`relative inline-block w-12 h-6 rounded-full bg-slate-200`}>
           <input
             type="checkbox"
             className="sr-only"
@@ -376,10 +495,112 @@ const Settings: React.FC = () => {
           />
           <div
             className={`absolute left-1 top-1 w-4 h-4 rounded-full transition-transform transform ${
-              userSettings.assistant.emotionalIntelligence ? 'translate-x-6 bg-blue-500' : userSettings.appearance.theme === 'Light Mode' ? 'bg-slate-400' : 'bg-gray-400'
+              userSettings.assistant.emotionalIntelligence ? 'translate-x-6 bg-green-600' : 'bg-slate-400'
             }`}
           />
         </div>
+      </div>
+    </div>
+  );
+
+  const renderAccessibilitySection = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <label className={`text-sm text-black`}>High Contrast Mode</label>
+        <div className={`relative inline-block w-12 h-6 rounded-full bg-slate-200`}>
+          <input
+            type="checkbox"
+            className="sr-only"
+            checked={userSettings.accessibility.highContrast}
+            onChange={(e) => setUserSettings({
+              ...userSettings,
+              accessibility: { ...userSettings.accessibility, highContrast: e.target.checked }
+            })}
+          />
+          <div
+            className={`absolute left-1 top-1 w-4 h-4 rounded-full transition-transform transform ${
+              userSettings.accessibility.highContrast ? 'translate-x-6 bg-green-600' : 'bg-slate-400'
+            }`}
+          />
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <label className={`text-sm text-black`}>Larger Text</label>
+        <div className={`relative inline-block w-12 h-6 rounded-full bg-slate-200`}>
+          <input
+            type="checkbox"
+            className="sr-only"
+            checked={userSettings.accessibility.largerText}
+            onChange={(e) => setUserSettings({
+              ...userSettings,
+              accessibility: { ...userSettings.accessibility, largerText: e.target.checked }
+            })}
+          />
+          <div
+            className={`absolute left-1 top-1 w-4 h-4 rounded-full transition-transform transform ${
+              userSettings.accessibility.largerText ? 'translate-x-6 bg-green-600' : 'bg-slate-400'
+            }`}
+          />
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <label className={`text-sm text-black`}>Reduced Motion</label>
+        <div className={`relative inline-block w-12 h-6 rounded-full bg-slate-200`}>
+          <input
+            type="checkbox"
+            className="sr-only"
+            checked={userSettings.accessibility.reducedMotion}
+            onChange={(e) => setUserSettings({
+              ...userSettings,
+              accessibility: { ...userSettings.accessibility, reducedMotion: e.target.checked }
+            })}
+          />
+          <div
+            className={`absolute left-1 top-1 w-4 h-4 rounded-full transition-transform transform ${
+              userSettings.accessibility.reducedMotion ? 'translate-x-6 bg-green-600' : 'bg-slate-400'
+            }`}
+          />
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <label className={`text-sm text-black`}>Screen Reader Support</label>
+        <div className={`relative inline-block w-12 h-6 rounded-full bg-slate-200`}>
+          <input
+            type="checkbox"
+            className="sr-only"
+            checked={userSettings.accessibility.screenReader}
+            onChange={(e) => setUserSettings({
+              ...userSettings,
+              accessibility: { ...userSettings.accessibility, screenReader: e.target.checked }
+            })}
+          />
+          <div
+            className={`absolute left-1 top-1 w-4 h-4 rounded-full transition-transform transform ${
+              userSettings.accessibility.screenReader ? 'translate-x-6 bg-green-600' : 'bg-slate-400'
+            }`}
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <label className={`block text-sm ${getThemeClasses('heading')} text-black`}>Color Blind Mode</label>
+        <select
+          className={`w-full ${getThemeClasses('surface')} border ${getThemeClasses('border')} rounded-lg px-4 py-2 text-black focus:border-blue-500 focus:ring-1 focus:ring-blue-500`}
+          value={userSettings.accessibility.colorBlindMode}
+          onChange={(e) => setUserSettings({
+            ...userSettings,
+            accessibility: { ...userSettings.accessibility, colorBlindMode: e.target.value }
+          })}
+        >
+          <option value="none">None</option>
+          <option value="protanopia">Protanopia (Red-Blind)</option>
+          <option value="deuteranopia">Deuteranopia (Green-Blind)</option>
+          <option value="tritanopia">Tritanopia (Blue-Blind)</option>
+          <option value="achromatopsia">Achromatopsia (Complete Color Blindness)</option>
+        </select>
       </div>
     </div>
   );
@@ -389,7 +610,7 @@ const Settings: React.FC = () => {
       <div className="space-y-2">
         <label className={`block text-sm ${getThemeClasses('heading')} text-black`}>Enable Experimental Agents</label>
         <div className="flex items-center justify-between">
-          <div className={`relative inline-block w-12 h-6 rounded-full ${userSettings.appearance.theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-700'}`}>
+          <div className={`relative inline-block w-12 h-6 rounded-full bg-slate-200`}>
             <input
               type="checkbox"
               className="sr-only"
@@ -401,7 +622,7 @@ const Settings: React.FC = () => {
             />
             <div
               className={`absolute left-1 top-1 w-4 h-4 rounded-full transition-transform transform ${
-                userSettings.advanced.experimentalAgents ? 'translate-x-6 bg-blue-500' : userSettings.appearance.theme === 'Light Mode' ? 'bg-slate-400' : 'bg-gray-400'
+                userSettings.advanced.experimentalAgents ? 'translate-x-6 bg-green-600' : 'bg-slate-400'
               }`}
             />
           </div>
@@ -411,7 +632,7 @@ const Settings: React.FC = () => {
       <div className="space-y-2">
         <label className={`block text-sm ${getThemeClasses('heading')} text-black`}>Health Data Integration</label>
         <div className="flex items-center justify-between">
-          <div className={`relative inline-block w-12 h-6 rounded-full ${userSettings.appearance.theme === 'Light Mode' ? 'bg-slate-200' : 'bg-gray-700'}`}>
+          <div className={`relative inline-block w-12 h-6 rounded-full bg-slate-200`}>
             <input
               type="checkbox"
               className="sr-only"
@@ -423,7 +644,7 @@ const Settings: React.FC = () => {
             />
             <div
               className={`absolute left-1 top-1 w-4 h-4 rounded-full transition-transform transform ${
-                userSettings.advanced.healthData ? 'translate-x-6 bg-blue-500' : userSettings.appearance.theme === 'Light Mode' ? 'bg-slate-400' : 'bg-gray-400'
+                userSettings.advanced.healthData ? 'translate-x-6 bg-green-600' : 'bg-slate-400'
               }`}
             />
           </div>
@@ -450,6 +671,148 @@ const Settings: React.FC = () => {
 
   const renderPrivacySection = () => (
     <div className="space-y-6">
+      <div className="space-y-2">
+        <label className={`block text-sm ${getThemeClasses('heading')} text-black`}>Data Privacy</label>
+        <p className={`text-sm text-black mb-4`}>Control whether AI models save your data for model improvement.</p>
+        
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className={`${getThemeClasses('heading')} text-black font-medium`}>Prevent Data Saving</h4>
+            <p className={`text-sm text-black`}>When enabled, your data will not be saved by AI models</p>
+          </div>
+          <div className="relative inline-block w-12 h-6 transition duration-200 ease-in-out rounded-full">
+            <input
+              type="checkbox"
+              id="dataSavingToggle"
+              className="absolute w-0 h-0 opacity-0"
+              checked={!userSettings.privacy.dataSaving}
+              onChange={(e) => setUserSettings({
+                ...userSettings,
+                privacy: { ...userSettings.privacy, dataSaving: !e.target.checked }
+              })}
+            />
+            <label
+              htmlFor="dataSavingToggle"
+              className={`block h-6 overflow-hidden cursor-pointer rounded-full ${
+                !userSettings.privacy.dataSaving ? 'translate-x-6 bg-green-600' : 'bg-slate-400'
+              }`}
+            >
+              <span
+                className={`absolute block w-6 h-6 bg-white rounded-full shadow inset-y-0 left-0 transition-transform duration-200 ease-in-out transform ${
+                  !userSettings.privacy.dataSaving ? 'translate-x-6' : 'translate-x-0'
+                }`}
+              ></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-200 my-6 pt-6"></div>
+
+      <div className="space-y-2">
+        <label className={`block text-sm ${getThemeClasses('heading')} text-black`}>Connected Apps</label>
+        <p className={`text-sm text-black mb-4`}>Manage connections to third-party apps and services.</p>
+        
+        <div className="space-y-3">
+          {connectedApps.map(app => (
+            <div key={app.id} className={`p-4 border ${getThemeClasses('border')} rounded-lg`}>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <span className="text-2xl mr-3">{app.icon}</span>
+                  <div>
+                    <h4 className={`${getThemeClasses('heading')} text-black font-medium`}>{app.name}</h4>
+                    <p className={`text-sm text-black`}>{app.description}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => toggleAppConnection(app.id)}
+                  className={`px-4 py-1.5 rounded-lg text-sm transition-colors ${
+                    app.connected 
+                      ? 'bg-red-100 text-red-600 hover:bg-red-200'
+                      : 'bg-green-100 text-green-600 hover:bg-green-200'
+                  }`}
+                >
+                  {app.connected ? 'Disconnect' : 'Connect'}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6">
+          <div className="p-4 border border-dashed border-gray-300 rounded-lg">
+            <div className="flex flex-col items-center text-center">
+              <span className="text-2xl mb-2">🔄</span>
+              <h4 className={`${getThemeClasses('heading')} text-black font-medium`}>Import Tasks</h4>
+              <p className={`text-sm text-black mb-3`}>Import your tasks from other applications</p>
+              
+              <div className="flex flex-wrap justify-center gap-2">
+                <button 
+                  onClick={() => handleImport('todoist')}
+                  className={`px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors text-sm`}
+                >
+                  Todoist
+                </button>
+                <button 
+                  onClick={() => handleImport('asana')}
+                  className={`px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors text-sm`}
+                >
+                  Asana
+                </button>
+                <button 
+                  onClick={() => handleImport('trello')}
+                  className={`px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors text-sm`}
+                >
+                  Trello
+                </button>
+                <button 
+                  onClick={() => handleImport('microsoft')}
+                  className={`px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors text-sm`}
+                >
+                  Microsoft To Do
+                </button>
+                <button 
+                  onClick={() => handleImport('google')}
+                  className={`px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors text-sm`}
+                >
+                  Google Tasks
+                </button>
+                <button 
+                  onClick={() => handleImport('csv')}
+                  className={`px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors text-sm`}
+                >
+                  CSV File
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <div className="p-4 border border-dashed border-gray-300 rounded-lg">
+            <div className="flex flex-col items-center text-center">
+              <span className="text-2xl mb-2">📤</span>
+              <h4 className={`${getThemeClasses('heading')} text-black font-medium`}>Export Your Data</h4>
+              <p className={`text-sm text-black mb-3`}>Download your data in various formats</p>
+              
+              <div className="flex flex-wrap justify-center gap-2">
+                <button className={`px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors text-sm`}>
+                  JSON
+                </button>
+                <button className={`px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors text-sm`}>
+                  CSV
+                </button>
+                <button className={`px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors text-sm`}>
+                  PDF Report
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-200 my-6 pt-6"></div>
+
       <div className="space-y-2">
         <label className={`block text-sm ${getThemeClasses('heading')} text-black`}>Reset Assistant Memory</label>
         <p className={`text-sm text-black`}>Clear all conversation history and learned preferences. This cannot be undone.</p>
@@ -478,6 +841,8 @@ const Settings: React.FC = () => {
         return renderDailyFlowSection();
       case 'assistant':
         return renderAssistantSection();
+      case 'accessibility':
+        return renderAccessibilitySection();
       case 'advanced':
         return renderAdvancedSection();
       case 'privacy':
@@ -533,6 +898,58 @@ const Settings: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Import Modal */}
+      {importModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className={`${getThemeClasses('surface')} max-w-md w-full rounded-lg p-6 shadow-xl`}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className={`${getThemeClasses('heading')} text-black text-xl`}>
+                Import from {selectedImportSource && selectedImportSource.charAt(0).toUpperCase() + selectedImportSource.slice(1)}
+              </h3>
+              <button 
+                onClick={closeImportModal}
+                className="text-gray-400 hover:text-gray-500"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {selectedImportSource === 'csv' ? (
+                <div>
+                  <p className="text-sm text-black mb-3">Upload a CSV file with your tasks</p>
+                  <label className="block w-full cursor-pointer">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
+                      <span className="text-3xl block mb-2">📄</span>
+                      <span className="text-sm text-gray-600">Click to upload CSV file</span>
+                      <input type="file" accept=".csv" className="hidden" />
+                    </div>
+                  </label>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-sm text-black mb-3">
+                    You'll be redirected to authorize access to your {selectedImportSource} account
+                  </p>
+                  <button className={`w-full py-2 ${getThemeClasses('button')} bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors`}>
+                    Continue to {selectedImportSource}
+                  </button>
+                </div>
+              )}
+              
+              <div className="flex justify-end mt-6">
+                <button 
+                  onClick={closeImportModal}
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

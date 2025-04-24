@@ -40,7 +40,7 @@ const MasterySummary: React.FC<MasterySummaryProps> = ({
         {children}
         
         {(archetypeName || archetypeQuote) && (
-          <div className={`p-4 border ${theme === 'Light Mode' ? `border-${accentColor}-300` : `border-${accentColor}-500/30`} rounded-lg ${theme === 'Light Mode' ? `bg-${accentColor}-50` : `bg-${accentColor}-500/5`} mt-4`}>
+          <div className={`p-4 border border-${accentColor}-300 rounded-lg bg-${accentColor}-50 mt-4`}>
             {archetypeName && (
               <h3 className="text-black font-bold text-lg">
                 {archetypeName}

@@ -678,6 +678,19 @@ const ChatView: React.FC = () => {
     navigate('/quests');
   };
 
+  // Navigate to quests page with breathing task filter
+  const goToBreathingTask = () => {
+    // Set session storage to indicate we want to filter for the breathing task
+    sessionStorage.setItem('showBreathingTask', 'true');
+    navigate('/quests');
+  };
+
+  // Navigate to quests page for mock user journeys (without filtering)
+  const goToQuestsFromMock = () => {
+    // No filtering, just navigate to quests page
+    navigate('/quests');
+  };
+
   // Handle choice selection from conversation templates
   const handleChoiceSelection = (choice: string) => {
     if (!discussingQuest) return;
@@ -1372,67 +1385,122 @@ const ChatView: React.FC = () => {
 
   // Render choice buttons if there are active choices
   const renderChoiceButtons = () => {
-    if (activeChoices.length === 0) return null;
-    
-    return (
-      <div className="flex justify-start mb-4">
-        <div className="bg-blue-600 text-white rounded-lg rounded-bl-none p-4 max-w-[80%]">
-          <div className="flex flex-col space-y-2">
-            {activeChoices.map((choice, index) => (
-              <button
-                key={index}
-                onClick={() => handleChoiceSelection(choice)}
-                disabled={isTyping || isPlayingMockConversation}
-                className="bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 rounded text-left transition-colors"
-              >
-                {choice}
-              </button>
-            ))}
-          </div>
+    if (activeChoices.length > 0) {
+      return (
+        <div className="flex flex-wrap gap-2 mt-4">
+          {activeChoices.map((choice, index) => (
+            <button 
+              key={index} 
+              onClick={() => handleChoiceSelection(choice)}
+              className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              {choice}
+            </button>
+          ))}
         </div>
-      </div>
-    );
+      );
+    }
+    return null;
   };
+
+  const renderQuestsButton = (message: ChatMessage) => {
+    if (message.hasQuestsButton) {
+      // Check if this is a breathing exercise message from the help flow
+      const isBreathingTask = message.text.includes("breathing exercise") && 
+                              sessionStorage.getItem('helpRequest') === 'processed';
+      
+      return (
+        <button
+          onClick={isBreathingTask ? goToBreathingTask : goToQuestsFromMock}
+          className="mt-2 px-4 py-2 bg-green-100 text-green-700 rounded-md border border-green-300 hover:bg-green-200 transition-colors"
+        >
+          View Task{isBreathingTask ? "" : "s"}
+        </button>
+      );
+    }
+    return null;
+  };
+
+  // After the existing useEffect blocks, add a new useEffect for the help request
+  useEffect(() => {
+    // Check if we have a help request from the home page
+    const helpRequest = sessionStorage.getItem('helpRequest');
+    
+    // Only process if it's a new help request, not one that's already been processed
+    if (helpRequest && helpRequest !== 'processed') {
+      // Add the user message
+      const userMessage: ChatMessage = {
+        text: helpRequest,
+        sender: 'user',
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, userMessage]);
+      
+      // Mark as processed instead of clearing completely
+      sessionStorage.removeItem('helpRequest');
+      sessionStorage.setItem('helpRequest', 'processed');
+      
+      // Show AI typing indicator
+      setIsTyping(true);
+      
+      // After a short delay, add the AI response with breathing exercise
+      setTimeout(() => {
+        setIsTyping(false);
+        
+        const aiResponse: ChatMessage = {
+          text: "I'm here for you. Let's start with a short breathing exercise to help you feel more centered. Take a slow deep breath in for 4 counts, hold for 2, and exhale for 6. Let's do this together 3 times.",
+          sender: 'ai',
+          timestamp: new Date(),
+          hasQuestsButton: true // This will show a button to create a task
+        };
+        
+        setMessages(prev => [...prev, aiResponse]);
+        
+        // Create a breathing exercise quest
+        const breathingQuest: Quest = {
+          id: Date.now(),
+          title: 'Mindful Breathing Exercise',
+          description: 'Complete a 3-minute breathing exercise: inhale for 4 counts, hold for 2, exhale for 6. Repeat 3 times.',
+          status: 'active',
+          difficulty: 'easy',
+          xp: 50,
+          category: 'calm',
+          tags: ['Resilience', 'Presence', 'Vitality'] as StatTag[]
+        };
+        
+        // Add the quest to the user's quests
+        addQuest(breathingQuest);
+        
+        // Store the breathing quest ID to know which one to filter for
+        sessionStorage.setItem('breathingQuestId', breathingQuest.id.toString());
+      }, 2000);
+    }
+  }, []);
 
   return (
     <div className={`flex flex-col h-screen ${getThemeClasses('background')}`}>
       {/* Header */}
       <header className={`${getThemeClasses('surface')} p-4 border-b ${getThemeClasses('border')} text-center`}>
-        <h1 className={`text-black ${getThemeClasses('heading')} text-xl`}>FinwiseOS System Chat</h1>
+        <h1 className={`text-black ${getThemeClasses('heading')} text-xl`}>Thrive System Chat</h1>
       </header>
 
       {/* Chat Messages - Adjusted to take available space minus fixed components */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((msg, index) => (
-          <div 
-            key={index}
-            className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            <div 
-              className={`max-w-[80%] rounded-lg p-3 relative ${
-                msg.sender === 'user' 
-                  ? `bg-green-600 text-white rounded-br-none` 
-                  : `bg-blue-600 text-white rounded-bl-none`
-              }`}
-            >
-              {msg.text}
-              <div className={`text-xs mt-1 ${
-                msg.sender === 'user' ? 'text-green-200' : 'text-blue-200'
-              }`}>
-                {formatTime(msg.timestamp)}
+        {messages.map((message, index) => (
+          <div key={index} className={`flex ${message.sender === 'ai' ? 'justify-start' : 'justify-end'} mb-4`}>
+            <div className={`max-w-3/4 p-3 rounded-lg ${
+              message.sender === 'ai' 
+              ? 'bg-gray-100 text-gray-800' 
+              : 'bg-green-600 text-white'
+            }`}>
+              <div className="text-sm">
+                {message.text}
               </div>
-              
-              {/* Show View Quests button if this is the final message */}
-              {msg.hasQuestsButton && (
-                <div className="mt-3">
-                  <button 
-                    onClick={goToQuestsPage}
-                    className="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-                  >
-                    View Quests
-                  </button>
-                </div>
-              )}
+              <div className="text-xs mt-1 text-right opacity-75">
+                {formatTime(message.timestamp)}
+              </div>
+              {message.sender === 'ai' && renderQuestsButton(message)}
             </div>
           </div>
         ))}
@@ -1466,9 +1534,9 @@ const ChatView: React.FC = () => {
                 <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
               </svg>
             </div>
-            <span className={`${getThemeClasses('text')} text-sm font-medium`}>You are replying to FinwiseOS System</span>
+            <span className={`${getThemeClasses('text')} text-sm font-medium`}>You are replying to Thrive System</span>
           </div>
-          <div className={`${theme === 'Light Mode' ? 'bg-slate-100' : getThemeClasses('surface')} rounded-lg p-3 border ${getThemeClasses('border')}`}>
+          <div className={`${getThemeClasses('surface')} rounded-lg p-3 border ${getThemeClasses('border')}`}>
             <textarea 
               ref={textareaRef}
               placeholder={activeChoices.length > 0 ? "Please select an option above..." : "Write your message... (Press Enter to send)"}

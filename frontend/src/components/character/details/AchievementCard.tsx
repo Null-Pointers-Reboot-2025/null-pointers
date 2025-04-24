@@ -34,12 +34,12 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement })
   return (
     <div className={`p-3 border rounded-lg ${achievement.unlocked 
       ? 'border-green-500/30 bg-green-500/5' 
-      : theme === 'Light Mode' ? 'border-slate-300' : 'border-gray-700'
+      : 'border-slate-300'
     }`}>
       <div className="flex items-start">
         <div className={`w-10 h-10 ${achievement.unlocked 
           ? 'bg-green-900/30 text-green-400' 
-          : theme === 'Light Mode' ? 'bg-slate-200 text-slate-500' : 'bg-gray-800 text-gray-400'
+          : 'bg-slate-200 text-slate-500'
         } rounded-full flex items-center justify-center text-xl mr-3`}>
           {achievement.unlocked ? '🏆' : '🔒'}
         </div>

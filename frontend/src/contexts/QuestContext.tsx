@@ -217,6 +217,8 @@ interface QuestContextType {
   completeQuest: (id: number) => void;
   addQuest: (quest: Quest) => void;
   resetToDefault: () => void;
+  filterBreathingTask: boolean;
+  setFilterBreathingTask: (filter: boolean) => void;
 }
 
 const QuestContext = createContext<QuestContextType | undefined>(undefined);
@@ -224,6 +226,7 @@ const QuestContext = createContext<QuestContextType | undefined>(undefined);
 export const QuestProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [quests, setQuests] = useState<Quest[]>(defaultQuests);
   const [weeklyGoals, setWeeklyGoals] = useState<WeeklyGoal[]>(defaultWeeklyGoals);
+  const [filterBreathingTask, setFilterBreathingTask] = useState<boolean>(false);
 
   // Handle completing a quest
   const completeQuest = (id: number) => {
@@ -299,7 +302,9 @@ export const QuestProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setWeeklyGoals, 
         completeQuest,
         addQuest,
-        resetToDefault
+        resetToDefault,
+        filterBreathingTask,
+        setFilterBreathingTask
       }}
     >
       {children}
