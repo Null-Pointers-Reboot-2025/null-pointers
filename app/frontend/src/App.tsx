@@ -21,7 +21,7 @@ function AppContent() {
   
   return (
     <Router>
-      <div className={`min-h-screen ${getThemeClasses('background')} ${getThemeClasses('text')}`}>
+      <div className="min-h-screen bg-white text-[#000000]">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/chat" element={<ChatView />} />

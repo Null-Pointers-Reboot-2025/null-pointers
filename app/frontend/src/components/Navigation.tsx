@@ -7,12 +7,12 @@ const Navigation: React.FC = () => {
   const { getThemeClasses } = useTheme();
   
   return (
-    <nav className="bg-green-500 fixed bottom-0 left-0 right-0 p-2 border-t border-green-600 z-50">
+    <nav className="bg-[#007A33] fixed bottom-0 left-0 right-0 p-2 border-t border-[#006629] z-50 shadow-md">
       <div className="max-w-md mx-auto flex justify-around">
         <Link 
           to="/" 
           className={`flex flex-col items-center p-2 ${
-            location.pathname === '/' ? 'text-white' : 'text-green-100 hover:text-white'
+            location.pathname === '/' ? 'text-white' : 'text-[#D2F4C3] hover:text-white'
           }`}
         >
           <svg 
@@ -35,7 +35,7 @@ const Navigation: React.FC = () => {
         <Link 
           to="/character" 
           className={`flex flex-col items-center p-2 ${
-            location.pathname.includes('/character') ? 'text-white' : 'text-green-100 hover:text-white'
+            location.pathname.includes('/character') ? 'text-white' : 'text-[#D2F4C3] hover:text-white'
           }`}
         >
           <svg 
@@ -58,7 +58,7 @@ const Navigation: React.FC = () => {
         <Link 
           to="/chat" 
           className={`flex flex-col items-center p-2 ${
-            location.pathname === '/chat' ? 'text-white' : 'text-green-100 hover:text-white'
+            location.pathname === '/chat' ? 'text-white' : 'text-[#D2F4C3] hover:text-white'
           }`}
         >
           <svg 
@@ -81,7 +81,7 @@ const Navigation: React.FC = () => {
         <Link 
           to="/quests" 
           className={`flex flex-col items-center p-2 ${
-            location.pathname === '/quests' ? 'text-white' : 'text-green-100 hover:text-white'
+            location.pathname === '/quests' ? 'text-white' : 'text-[#D2F4C3] hover:text-white'
           }`}
         >
           <svg 
@@ -104,7 +104,7 @@ const Navigation: React.FC = () => {
         <Link 
           to="/settings" 
           className={`flex flex-col items-center p-2 ${
-            location.pathname === '/settings' ? 'text-white' : 'text-green-100 hover:text-white'
+            location.pathname === '/settings' ? 'text-white' : 'text-[#D2F4C3] hover:text-white'
           }`}
         >
           <svg 

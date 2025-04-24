@@ -2,22 +2,22 @@ import { StatTag } from './types';
 
 export const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
-    case 'easy': return 'text-green-400';
-    case 'medium': return 'text-yellow-400';
-    case 'hard': return 'text-red-400';
-    default: return 'text-gray-400';
+    case 'easy': return 'text-[#007A33]';  // Dark Green
+    case 'medium': return 'text-[#FFA500]'; // Orange
+    case 'hard': return 'text-[#FF3B30]';   // Red
+    default: return 'text-[#1A1A1A]';       // Dark Gray
   }
 };
 
 export const getCategoryColor = (category: string) => {
   switch (category) {
-    case 'physical': return 'bg-purple-700 text-white';
-    case 'mental': return 'bg-blue-700 text-white';
-    case 'emotional': return 'bg-teal-700 text-white';
-    case 'finance': return 'bg-emerald-700 text-white';
-    case 'calm': return 'bg-sky-700 text-white';
-    case 'recovery': return 'bg-amber-700 text-white';
-    default: return 'bg-gray-700 text-white';
+    case 'physical': return 'bg-[#007A33] text-white';    // Dark Green
+    case 'mental': return 'bg-[#006629] text-white';      // Darker Green
+    case 'emotional': return 'bg-[#A4DE7C] text-[#000000]'; // Light Green
+    case 'finance': return 'bg-[#FFA500] text-white';      // Orange
+    case 'calm': return 'bg-[#D2F4C3] text-[#000000]';     // Lighter Green
+    case 'recovery': return 'bg-[#BFFF00] text-[#000000]'; // Lime Green
+    default: return 'bg-[#E5E5E5] text-[#000000]';         // Light Gray
   }
 };
 
@@ -40,20 +40,20 @@ export const getTagColor = (tag: StatTag) => {
   const emotionalTags = ['Resilience', 'Clarity', 'Presence', 'Charisma'];
 
   if (physicalTags.includes(tag)) {
-    return 'bg-purple-700 text-white';
+    return 'bg-[#BFFF00] text-[#000000]';  // Lime Green
   } else if (mentalTags.includes(tag)) {
-    return 'bg-blue-700 text-white';
+    return 'bg-[#A4DE7C] text-[#000000]';  // Light Green
   } else if (emotionalTags.includes(tag)) {
-    return 'bg-teal-700 text-white';
+    return 'bg-[#D2F4C3] text-[#000000]';  // Lighter Green
   }
-  return 'bg-gray-700 text-white';
+  return 'bg-[#E5E5E5] text-[#000000]';    // Light Gray
 };
 
 export const getStatusColor = (status: string) => {
   switch (status) {
-    case 'active': return 'bg-blue-600 text-white';
-    case 'completed': return 'bg-green-600 text-white';
-    case 'failed': return 'bg-red-600 text-white';
-    default: return 'bg-gray-600 text-white';
+    case 'active': return 'bg-[#007A33] text-white';    // Dark Green
+    case 'completed': return 'bg-[#A4DE7C] text-[#000000]'; // Light Green
+    case 'failed': return 'bg-[#FF3B30] text-white';    // Red
+    default: return 'bg-[#E5E5E5] text-[#000000]';      // Light Gray
   }
 };
