@@ -2,12 +2,12 @@
 
 output "resource_group_name" {
   description = "The name of the Azure Resource Group."
-  value       = azurerm_resource_group.main.name
+  value       = data.azurerm_resource_group.main.name
 }
 
 output "location" {
   description = "The Azure region where resources are deployed."
-  value       = azurerm_resource_group.main.location
+  value       = data.azurerm_resource_group.main.location
 }
 
 output "container_registry_login_server" {
