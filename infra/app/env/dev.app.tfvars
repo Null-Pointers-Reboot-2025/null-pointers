@@ -2,7 +2,7 @@
 
 # Still needed by app stack
 resource_group_name = "Team25"
-location            = "uksouth"
+location            = "australiaeast"
 environment         = "dev"
 project_prefix      = "hackapp"
 

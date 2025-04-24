@@ -2,7 +2,7 @@
 
 # Required
 resource_group_name = "Team25"
-location            = "uksouth"
+location            = "australiaeast"
 environment         = "prod"
 project_prefix      = "hackapp"
 
