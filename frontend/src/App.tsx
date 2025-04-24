@@ -13,6 +13,7 @@ import SystemDetail from './components/character/SystemDetail';
 import FinancialDetail from './components/character/FinancialDetail';
 import Navigation from './components/Navigation';
 import Settings from './pages/Settings';
+import ApiCaller from './components/api_test/test';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { QuestProvider } from './contexts/QuestContext';
 
@@ -22,6 +23,7 @@ function AppContent() {
   return (
     <Router>
       <div className={`min-h-screen ${getThemeClasses('background')} ${getThemeClasses('text')}`}>
+      <ApiCaller />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/chat" element={<ChatView />} />
@@ -46,6 +48,7 @@ function App() {
       <QuestProvider>
         <AppContent />
       </QuestProvider>
+      
     </ThemeProvider>
   );
 }
