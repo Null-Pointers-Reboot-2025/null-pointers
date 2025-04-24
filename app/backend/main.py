@@ -20,7 +20,7 @@ CONVERSATION = [
 
 
 endpoint = os.getenv("ENDPOINT_URL")  
-deployment = "4o"
+deployment = "o1"
 subscription_key = os.getenv("AZURE_OPENAI_API_KEY")  
 
 app = FastAPI()
