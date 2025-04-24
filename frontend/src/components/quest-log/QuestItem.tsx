@@ -70,9 +70,9 @@ const QuestItem: React.FC<QuestItemProps> = ({ quest, completeQuest }) => {
         />
       )}
       <div 
-        className={`${getThemeClasses('surface')} border-l-4 ${
-          quest.status === 'completed' ? 'border-green-500' : getThemeClasses('border')
-        } ${getThemeClasses('card')} p-4 shadow-lg hover:shadow-blue-500/10 transition-shadow`}
+        className={`bg-white border-l-4 ${
+          quest.status === 'completed' ? 'border-[#007A33]' : 'border-[#A4DE7C]'
+        } ${getThemeClasses('card')} p-4 shadow-md hover:shadow-primary transition-shadow mb-3`}
       >
         <div className="flex items-start">
           <div className="mr-3 mt-1">
@@ -80,8 +80,8 @@ const QuestItem: React.FC<QuestItemProps> = ({ quest, completeQuest }) => {
               onClick={handleCompleteQuest}
               className={`w-5 h-5 rounded border cursor-pointer ${
                 quest.status === 'completed' 
-                  ? 'bg-green-500 border-green-500 flex items-center justify-center' 
-                  : 'border-blue-500 hover:bg-blue-500/10'
+                  ? 'bg-[#007A33] border-[#007A33] flex items-center justify-center' 
+                  : 'border-[#007A33] hover:bg-[#A4DE7C]/20'
               }`}
             >
               {quest.status === 'completed' && (
@@ -96,36 +96,36 @@ const QuestItem: React.FC<QuestItemProps> = ({ quest, completeQuest }) => {
             <div className="flex justify-between items-start">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className={`${getThemeClasses('heading')} ${getThemeClasses('text')} text-lg`}>{quest.title}</h3>
-                  <span className={`text-xs px-2 py-0.5 rounded min-w-[80px] text-center ${getCategoryColor(quest.category)}`}>
+                  <h3 className={`font-semibold text-[#000000] text-lg`}>{quest.title}</h3>
+                  <span className={`text-xs px-2 py-0.5 rounded min-w-[80px] text-center bg-[#FFA500] text-white`}>
                     <CategoryDisplay category={quest.category} />
                   </span>
                 </div>
-                <p className={`${getThemeClasses('textSecondary')} mt-1`}>{quest.description}</p>
+                <p className={`text-[#1A1A1A] mt-1`}>{quest.description}</p>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {quest.tags.map(tag => (
-                    <span key={tag} className={`text-xs px-2 py-0.5 rounded ${getTagColor(tag)}`}>
+                    <span key={tag} className={`text-xs px-2 py-0.5 rounded bg-[#BFFF00] text-[#000000]`}>
                       {tag}
                     </span>
                   ))}
                 </div>
                 <div className="flex space-x-4 mt-3 text-sm">
-                  <span className={`${getDifficultyColor(quest.difficulty)}`}>
+                  <span className={`text-[#007A33] font-medium`}>
                     {quest.difficulty.charAt(0).toUpperCase() + quest.difficulty.slice(1)}
                   </span>
-                  <span className="text-blue-400">XP: {quest.xp}</span>
+                  <span className="text-[#007A33]">XP: {quest.xp}</span>
                 </div>
               </div>
               {quest.status === 'active' && (
                 <button 
                   onClick={handleCompleteQuest}
-                  className="hidden md:block bg-blue-600 hover:bg-blue-500 text-white text-sm px-3 py-1 rounded transition-colors"
+                  className="hidden md:block bg-[#007A33] hover:bg-[#006629] text-white text-sm px-3 py-1 rounded transition-colors"
                 >
                   Complete
                 </button>
               )}
               {quest.status === 'completed' && (
-                <span className={`hidden md:block bg-green-900/30 text-green-700 text-sm px-3 py-1 rounded`}>
+                <span className={`hidden md:block bg-[#D2F4C3] text-[#007A33] text-sm px-3 py-1 rounded`}>
                   Completed
                 </span>
               )}

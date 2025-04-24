@@ -213,16 +213,16 @@ const Character: React.FC = () => {
   };
   
   const getCategoryTextClass = (color: string) => {
-    // Check if we're using the Lloyds Bank theme which has a green background
-    const isLloydsTheme = theme === 'Lloyds Bank';
+    // Check if we're using the Health App theme which has a green background
+    const isHealthAppTheme = theme === 'Health App';
     
     switch (color) {
-      case 'purple': return `${getThemeClasses('primary')} ${isLloydsTheme ? 'text-purple-900 font-bold' : 'text-purple-500 font-semibold'}`;
-      case 'blue': return `${getThemeClasses('primary')} ${isLloydsTheme ? 'text-blue-900 font-bold' : 'text-blue-500 font-semibold'}`;
-      case 'teal': return `${getThemeClasses('primary')} ${isLloydsTheme ? 'text-teal-900 font-bold' : 'text-teal-500 font-semibold'}`;
-      case 'amber': return `${getThemeClasses('primary')} ${isLloydsTheme ? 'text-amber-900 font-bold' : 'text-amber-500 font-semibold'}`;
-      case 'green': return `${getThemeClasses('primary')} ${isLloydsTheme ? 'text-emerald-900 font-bold' : 'text-green-500 font-semibold'}`;
-      default: return `${getThemeClasses('primary')} ${isLloydsTheme ? 'text-blue-900 font-bold' : 'text-blue-500 font-semibold'}`;
+      case 'purple': return `${getThemeClasses('primary')} ${isHealthAppTheme ? 'text-purple-900 font-bold' : 'text-purple-500 font-semibold'}`;
+      case 'blue': return `${getThemeClasses('primary')} ${isHealthAppTheme ? 'text-blue-900 font-bold' : 'text-blue-500 font-semibold'}`;
+      case 'teal': return `${getThemeClasses('primary')} ${isHealthAppTheme ? 'text-teal-900 font-bold' : 'text-teal-500 font-semibold'}`;
+      case 'amber': return `${getThemeClasses('primary')} ${isHealthAppTheme ? 'text-amber-900 font-bold' : 'text-amber-500 font-semibold'}`;
+      case 'green': return `${getThemeClasses('primary')} ${isHealthAppTheme ? 'text-emerald-900 font-bold' : 'text-green-500 font-semibold'}`;
+      default: return `${getThemeClasses('primary')} ${isHealthAppTheme ? 'text-blue-900 font-bold' : 'text-blue-500 font-semibold'}`;
     }
   };
 
@@ -231,16 +231,16 @@ const Character: React.FC = () => {
       {/* Header */}
       <header className={`${getThemeClasses('surface')} p-4 border-b ${getThemeClasses('border')}`}>
         <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <h1 className={`${theme === 'Lloyds Bank' ? 'text-black' : getThemeClasses('primary')} ${getThemeClasses('heading')} text-xl font-bold`}>Character Stats</h1>
+          <h1 className={`${theme === 'Health App' ? 'text-black' : getThemeClasses('primary')} ${getThemeClasses('heading')} text-xl font-bold`}>Character Stats</h1>
           <div className="flex items-center space-x-1">
-            <span className={`${theme === 'Lloyds Bank' ? 'text-black' : getThemeClasses('primary')} ${getThemeClasses('heading')} text-lg font-bold`}>Lv.{level}</span>
+            <span className={`${theme === 'Health App' ? 'text-black' : getThemeClasses('primary')} ${getThemeClasses('heading')} text-lg font-bold`}>Lv.{level}</span>
             <div className={`w-16 h-4 bg-slate-200 rounded-full overflow-hidden ml-2`}>
               <div 
                 className={`h-full bg-gradient-to-r ${getThemeClasses('primary')} from-amber-500 to-amber-400`}
                 style={{ width: `${progressToNextLevel}%` }}
               ></div>
             </div>
-            <span className={`text-xs ${theme === 'Lloyds Bank' ? 'text-black font-semibold' : getThemeClasses('textSecondary')}`}>{currentLevelXP}/{xpToNextLevel}XP</span>
+            <span className={`text-xs ${theme === 'Health App' ? 'text-black font-semibold' : getThemeClasses('textSecondary')}`}>{currentLevelXP}/{xpToNextLevel}XP</span>
           </div>
         </div>
       </header>
@@ -255,12 +255,12 @@ const Character: React.FC = () => {
                 👤
               </div>
               <div className="ml-4">
-                <h2 className={`${theme === 'Lloyds Bank' ? 'text-black' : getThemeClasses('text')} ${getThemeClasses('heading')} text-xl font-bold`}>Your Character</h2>
-                <p className={`${theme === 'Lloyds Bank' ? 'text-black font-semibold' : getThemeClasses('textSecondary')}`}>Total XP: {totalXP}</p>
+                <h2 className={`${theme === 'Health App' ? 'text-black' : getThemeClasses('text')} ${getThemeClasses('heading')} text-xl font-bold`}>Your Character</h2>
+                <p className={`${theme === 'Health App' ? 'text-black font-semibold' : getThemeClasses('textSecondary')}`}>Total XP: {totalXP}</p>
               </div>
             </div>
             <div className="text-right">
-              <div className={`${theme === 'Lloyds Bank' ? 'text-black font-semibold' : getThemeClasses('textSecondary')} text-sm mb-1`}>Overall Progress</div>
+              <div className={`${theme === 'Health App' ? 'text-black font-semibold' : getThemeClasses('textSecondary')} text-sm mb-1`}>Overall Progress</div>
               <div className={`w-40 h-3 bg-slate-200 rounded-full overflow-hidden`}>
                 <div 
                   className={`h-full bg-gradient-to-r ${getThemeClasses('primary')} from-blue-600 to-purple-600`}
@@ -279,7 +279,7 @@ const Character: React.FC = () => {
               <div className={`p-4 ${getCategoryBgClass(category.color)} flex items-center justify-between`}>
                 <div className="flex items-center">
                   <span className="text-2xl mr-2">{category.icon}</span>
-                  <h2 className={`${theme === 'Lloyds Bank' ? 'text-black' : getCategoryTextClass(category.color)} ${getThemeClasses('heading')} font-bold`}>{category.name}</h2>
+                  <h2 className={`${theme === 'Health App' ? 'text-black' : getCategoryTextClass(category.color)} ${getThemeClasses('heading')} font-bold`}>{category.name}</h2>
                 </div>
                 <Link to={`/character/${category.id}`} className="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 font-bold text-sm flex items-center transition-colors duration-200 shadow-md">
                   View Details
@@ -295,12 +295,12 @@ const Character: React.FC = () => {
                   <div key={stat.name} className="space-y-2">
                     <div className="flex justify-between items-center">
                       <div>
-                        <h3 className={`${theme === 'Lloyds Bank' ? 'text-black' : getThemeClasses('text')} ${getThemeClasses('heading')} font-medium`}>{stat.name}</h3>
-                        <p className={`${theme === 'Lloyds Bank' ? 'text-black' : getThemeClasses('textSecondary')} text-sm`}>{stat.description}</p>
+                        <h3 className={`${theme === 'Health App' ? 'text-black' : getThemeClasses('text')} ${getThemeClasses('heading')} font-medium`}>{stat.name}</h3>
+                        <p className={`${theme === 'Health App' ? 'text-black' : getThemeClasses('textSecondary')} text-sm`}>{stat.description}</p>
                       </div>
                       <div className="text-right">
-                        <div className={`${theme === 'Lloyds Bank' ? 'text-black font-bold' : getThemeClasses('text')} font-medium`}>{stat.value}%</div>
-                        <div className={`${theme === 'Lloyds Bank' ? 'text-black font-semibold' : getThemeClasses('textSecondary')} text-sm`}>{stat.xp} XP</div>
+                        <div className={`${theme === 'Health App' ? 'text-black font-bold' : getThemeClasses('text')} font-medium`}>{stat.value}%</div>
+                        <div className={`${theme === 'Health App' ? 'text-black font-semibold' : getThemeClasses('textSecondary')} text-sm`}>{stat.xp} XP</div>
                       </div>
                     </div>
                     <div className={`h-2 bg-slate-200 rounded-full overflow-hidden`}>

@@ -1530,7 +1530,7 @@ const ChatView: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4 pb-20">
           <div className="flex items-center mb-2">
             <div className={`w-8 h-8 rounded-full ${getThemeClasses('primary')} flex items-center justify-center mr-2`}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-black" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
               </svg>
             </div>
@@ -1540,7 +1540,7 @@ const ChatView: React.FC = () => {
             <textarea 
               ref={textareaRef}
               placeholder={activeChoices.length > 0 ? "Please select an option above..." : "Write your message... (Press Enter to send)"}
-              className={`w-full bg-transparent ${getThemeClasses('text')} resize-none outline-none min-h-[60px] placeholder-white`}
+              className={`w-full bg-transparent ${getThemeClasses('text')} resize-none outline-none min-h-[60px] placeholder-black`}
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -1565,7 +1565,7 @@ const ChatView: React.FC = () => {
                   isTyping || isPlayingMockConversation || !replyText.trim() || activeChoices.length > 0
                     ? 'bg-gray-600 cursor-not-allowed' 
                     : `${getThemeClasses('primary')} hover:opacity-90`
-                } text-white rounded-lg px-4 py-1 text-sm font-medium transition-colors flex items-center`}
+                } text-black rounded-lg px-4 py-1 text-sm font-medium transition-colors flex items-center`}
                 disabled={isTyping || isPlayingMockConversation || !replyText.trim() || activeChoices.length > 0}
               >
                 <span>{isTyping ? 'AI Typing...' : (isPlayingMockConversation ? 'Conversation in progress...' : 'Send')}</span>

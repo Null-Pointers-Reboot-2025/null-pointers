@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--color-primary);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -25,7 +25,17 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: var(--color-primary);
+}
+
+/* Custom gradient backgrounds */
+.bg-gradient-green {
+  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%);
+}
+
+/* Authentication screen styling */
+.auth-container {
+  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%);
 }
 
 @keyframes App-logo-spin {
