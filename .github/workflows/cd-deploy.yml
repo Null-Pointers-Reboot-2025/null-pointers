@@ -1,0 +1,126 @@
+# .github/workflows/cd-deploy.yml - Service-agnostic implementation
+name: Reusable CD – Deploy Container App
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      tf_vars_file:
+        required: true
+        type: string
+      project_prefix:
+        required: true
+        type: string
+      resource_group_name:
+        required: true
+        type: string
+      run_canary:
+        required: true
+        type: boolean
+      git_ref:
+        required: true
+        type: string
+    secrets:
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_TENANT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+      TF_STATE_STORAGE_ACCOUNT:
+        required: true
+      TF_STATE_CONTAINER:
+        required: true
+      TF_STATE_RG:
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy-infra:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_ref }}
+          
+      - name: Download deployment digests
+        uses: actions/download-artifact@v4
+        with:
+          name: deployment-digests
+          path: .
+      
+      - name: Azure login (OIDC)
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: "1.6.3"
+      
+      - name: Prepare service digests file
+        id: digests
+        run: |
+          # Check if digests.json exists
+          if [ ! -f digests.json ]; then
+            echo "Error: digests.json not found."
+            exit 1
+          fi
+          
+          # Display services to be deployed for logging
+          echo "Services to be deployed:"
+          jq -r 'keys[]' digests.json | sort | while read SERVICE; do
+            DIGEST=$(jq -r ".[\"$SERVICE\"]" digests.json)
+            echo "  - $SERVICE: $DIGEST"
+          done
+          
+          # Copy digests file to a location where Terraform can access it
+          cp digests.json service_digests.json
+          echo "service_digests_file=service_digests.json" >> "$GITHUB_OUTPUT"
+
+      - name: Terraform init
+        working-directory: infra/app
+        run: |
+          terraform init \
+            -backend-config="storage_account_name=${{ secrets.TF_STATE_STORAGE_ACCOUNT }}" \
+            -backend-config="container_name=${{ secrets.TF_STATE_CONTAINER }}" \
+            -backend-config="key=${{ inputs.environment }}-app.tfstate" \
+            -backend-config="resource_group_name=${{ secrets.TF_STATE_RG }}"
+
+      - name: Terraform apply
+        working-directory: infra/app
+        run: |
+          terraform apply -auto-approve \
+            -var-file="${{ inputs.tf_vars_file }}" \
+            -var="service_digests_file=../../${{ steps.digests.outputs.service_digests_file }}" \
+            -var="environment=${{ inputs.environment }}" \
+            -var="project_prefix=${{ inputs.project_prefix }}" \
+            -var="resource_group_name=${{ inputs.resource_group_name }}"
+
+      - name: Setup Canary Deployment
+        if: inputs.run_canary == true
+        id: canary_setup
+        run: |
+          echo "Setting up canary deployment for ${{ inputs.environment }} environment"
+          echo "Canary deployment would be implemented here"
+          # This would be implemented based on your specific canary requirements
+          # For example, using Azure CLI to manage revisions and traffic weights
+
+      - name: Post-Deployment Verification
+        run: |
+          echo "Verifying deployment in ${{ inputs.environment }} environment"
+          # Add verification steps here, such as health checks or smoke tests
+          # Example:
+          # FQDN=$(terraform -chdir=infra/app output -raw container_app_fqdn)
+          # curl -s -o /dev/null -w "%{http_code}" https://$FQDN/healthz | grep 200
