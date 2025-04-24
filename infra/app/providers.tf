@@ -20,6 +20,7 @@ provider "azurerm" {
   # Assumes environment variables AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID,
   # and ARM_OIDC_TOKEN are set by the GitHub Actions workflow.
   use_oidc = true
+  resource_provider_registrations = "none"
 }
 
 # No specific provider block needed for azurecaf unless customizing its behavior
