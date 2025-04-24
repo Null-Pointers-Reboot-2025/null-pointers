@@ -11,10 +11,9 @@ cd app/backend/
 python3 -m venv .venv
 pip install -r requirements.txt
 run_api.sh
+Make sure the ports make sense in frontend/pages/chatView/sendMessage and main.py
 
-Make sure the ports make sense
-
-In another isolated terminal
+In another isolated terminal:
 cd app/frontend/
 npm start
 
