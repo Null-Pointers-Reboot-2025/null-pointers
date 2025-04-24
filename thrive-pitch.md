@@ -1,19 +1,6 @@
 ## 🧠 One-Line Summary
 **Thrive** is an agentic AI-powered task manager that turns wellbeing, life goals, and financial intentions into personalised, adaptive micro-tasks — helping users move forward at their own pace with compassion and clarity.
 
----
-
-## 🪄 Elevator Pitch
-Most young adults feel overwhelmed trying to juggle mental health, life admin, and finances — with multiple apps, zero cohesion, and no clear path forward.
-
-**Thrive** changes that.  
-It's not just a to-do list — it's a compassionate, intelligent guide.  
-Using agentic AI, Thrive learns how you're feeling, what you're facing, and where you want to go — then crafts a personalised plan, broken down into manageable tasks.  
-
-By integrating wellness tools, financial advice, and life coaching into a unified task system, Thrive helps users improve wellbeing *while* staying on top of life.
-
----
-
 ## 📖 Real-World Example: Ahmed's Journey
 
 Meet Ahmed, a 26-year-old ICU nurse in Manchester working rotating night shifts. Like many young adults, Ahmed faces unique challenges in maintaining his wellbeing:
@@ -22,6 +9,14 @@ Meet Ahmed, a 26-year-old ICU nurse in Manchester working rotating night shifts.
 - Difficulty maintaining consistent routines
 - Privacy concerns about health data usage
 - Need for personalized support that fits his lifestyle
+
+Most young adults feel overwhelmed trying to juggle mental health, life admin, and finances — with multiple apps, zero cohesion, and no clear path forward.
+
+**Thrive** changes that.  
+It's not just a to-do list — it's a compassionate, intelligent guide.  
+Using agentic AI, Thrive learns how you're feeling, what you're facing, and where you want to go — then crafts a personalised plan, broken down into manageable tasks.  
+
+By integrating wellness tools, financial advice, and life coaching into a unified task system, Thrive helps Ahmed improve wellbeing *while* staying on top of life
 
 ### How Thrive Helped Ahmed
 
