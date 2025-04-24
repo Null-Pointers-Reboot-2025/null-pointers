@@ -85,7 +85,7 @@ resource "azurerm_container_registry" "main" {
   resource_group_name = data.azurerm_resource_group.main.name
   location            = data.azurerm_resource_group.main.location
   sku                 = var.container_registry_sku
-  admin_enabled       = false
+  admin_enabled       = true
   tags                = merge(var.tags, { Environment = var.environment })
 }
 
