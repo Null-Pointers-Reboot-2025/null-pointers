@@ -883,145 +883,53 @@ const ChatView: React.FC = () => {
     e.preventDefault();
     sendMessage();
   };
-  
-  const sendMessage = () => {
-    if (!replyText.trim()) return;
-
-    // Check message triggers
+  const sendMessage = async () => {
     const trimmedInput = replyText.trim();
-    console.log("Message input:", trimmedInput);
-    
-    // Li Wei trigger
-    if (trimmedInput.toLowerCase().includes("li wei") && !isPlayingMockConversation) {
-      console.log("Li Wei trigger activated", trimmedInput);
-      // Add user message
-      const newUserMessage: ChatMessage = {
-        text: replyText,
-        sender: 'user',
-        timestamp: new Date()
-      };
-      
-      setMessages([...messages, newUserMessage]);
-      setReplyText('');
-      
-      // Start the Li Wei conversation
-      startLiWeiConversation();
-      return;
-    }
-    
-    // Samira trigger
-    if (trimmedInput.toLowerCase().includes("samira") && !isPlayingMockConversation) {
-      console.log("Samira trigger activated", trimmedInput);
-      // Add user message
-      const newUserMessage: ChatMessage = {
-        text: replyText,
-        sender: 'user',
-        timestamp: new Date()
-      };
-      
-      setMessages([...messages, newUserMessage]);
-      setReplyText('');
-      
-      // Start the Samira conversation
-      startSamiraConversation();
-      return;
-    }
-    
-    // Javier trigger
-    if (trimmedInput.toLowerCase().includes("javier") && !isPlayingMockConversation) {
-      console.log("Javier trigger activated", trimmedInput);
-      // Add user message
-      const newUserMessage: ChatMessage = {
-        text: replyText,
-        sender: 'user',
-        timestamp: new Date()
-      };
-      
-      setMessages([...messages, newUserMessage]);
-      setReplyText('');
-      
-      // Start the Javier conversation
-      startJavierConversation();
-      return;
-    }
-    
-    // Aisha trigger
-    if (trimmedInput.toLowerCase().includes("aisha") && !isPlayingMockConversation) {
-      console.log("Aisha trigger activated", trimmedInput);
-      // Add user message
-      const newUserMessage: ChatMessage = {
-        text: replyText,
-        sender: 'user',
-        timestamp: new Date()
-      };
-      
-      setMessages([...messages, newUserMessage]);
-      setReplyText('');
-      
-      // Start the Aisha conversation
-      startAishaConversation();
-      return;
-    }
-
-    // Kofi trigger
-    if (trimmedInput.toLowerCase().includes("kofi") && !isPlayingMockConversation) {
-      console.log("Kofi trigger activated", trimmedInput);
-      // Add user message
-      const newUserMessage: ChatMessage = {
-        text: replyText,
-        sender: 'user',
-        timestamp: new Date()
-      };
-      
-      setMessages([...messages, newUserMessage]);
-      setReplyText('');
-      
-      // Start the Kofi conversation
-      startKofiConversation();
-      return;
-    }
-
-    // Ahmed trigger
-    if (trimmedInput.toLowerCase().includes("ahmed") && !isPlayingMockConversation) {
-      console.log("Ahmed trigger activated", trimmedInput);
-      // Add user message
-      const newUserMessage: ChatMessage = {
-        text: replyText,
-        sender: 'user',
-        timestamp: new Date()
-      };
-      
-      setMessages([...messages, newUserMessage]);
-      setReplyText('');
-      
-      // Start the Ahmed conversation
-      startAhmedConversation();
-      return;
-    }
-
-    // Regular message handling
+    if (!trimmedInput) return;
+  
     const newUserMessage: ChatMessage = {
-      text: replyText,
+      text: trimmedInput,
       sender: 'user',
       timestamp: new Date()
     };
-    
-    setMessages([...messages, newUserMessage]);
+  
+    setMessages(prev => [...prev, newUserMessage]);
     setReplyText('');
-    
-    // Show typing animation
     setIsTyping(true);
-    
-    // Simulate AI response with delay
-    setTimeout(() => {
-      const aiResponse: ChatMessage = { 
-        text: "I'm your AI assistant. I'm here to help you with your quests and adventures.", 
+  
+    try {
+      const response = await fetch('http://localhost:8000/api/ping', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: trimmedInput }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch response from server');
+      }
+  
+      const data = await response.json();
+  
+      const aiResponse: ChatMessage = {
+        text: data.message,
+        sender: 'ai',
+        timestamp: new Date(),
+      };
+  
+      setMessages(prev => [...prev, aiResponse]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      const fallbackResponse: ChatMessage = {
+        text: "Sorry, something went wrong contacting the server.",
         sender: 'ai',
         timestamp: new Date()
       };
+      setMessages(prev => [...prev, fallbackResponse]);
+    } finally {
       setIsTyping(false);
-      setMessages(prev => [...prev, aiResponse]);
-    }, 2500); // Longer delay to show the animation
+    }
   };
 
   // Start the Li Wei conversation
