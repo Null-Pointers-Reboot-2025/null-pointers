@@ -661,7 +661,7 @@ const ChatView: React.FC = () => {
   const [replyText, setReplyText] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([
     { 
-      text: 'Welcome to Ascendify! How can I assist you today?', 
+      text: 'Welcome to Thrive! How can I assist you today?', 
       sender: 'ai',
       timestamp: new Date(Date.now() - 60000) // 1 minute ago
     },
@@ -906,19 +906,38 @@ const ChatView: React.FC = () => {
         body: JSON.stringify({ message: trimmedInput }),
       });
   
-      if (!response.ok) {
-        throw new Error('Failed to fetch response from server');
-      }
+      if (!response.ok) throw new Error('Failed to fetch response from server');
   
       const data = await response.json();
+      const aiMessages: ChatMessage[] = [];
   
-      const aiResponse: ChatMessage = {
-        text: data.message,
-        sender: 'ai',
-        timestamp: new Date(),
-      };
+      if ('message' in data) {
+        aiMessages.push({
+          text: data.message,
+          sender: 'ai',
+          timestamp: new Date(),
+        });
+      }
   
-      setMessages(prev => [...prev, aiResponse]);
+      if ('quest' in data) {
+        const quest = data.quest as Quest;
+        aiMessages.push({
+          text: `🎯 *New Quest Unlocked!*\n**${quest.title}**\n${quest.description}\n*Difficulty:* ${quest.difficulty}, *XP:* ${quest.xp}`,
+          sender: 'ai',
+          timestamp: new Date(),
+        });
+      }
+  
+      // If no known keys found, treat entire object as raw JSON response
+      if (!('message' in data) && !('quest' in data)) {
+        aiMessages.push({
+          text: "🗂 *Raw JSON Response:*\n```json\n" + JSON.stringify(data, null, 2) + "\n```",
+          sender: 'ai',
+          timestamp: new Date(),
+        });
+      }
+  
+      setMessages(prev => [...prev, ...aiMessages]);
     } catch (error) {
       console.error('Error sending message:', error);
       const fallbackResponse: ChatMessage = {
@@ -931,6 +950,55 @@ const ChatView: React.FC = () => {
       setIsTyping(false);
     }
   };
+  
+//  const sendMessage = async () => {
+//   const trimmedInput = replyText.trim();
+//   if (!trimmedInput) return;
+
+//   const newUserMessage: ChatMessage = {
+//     text: trimmedInput,
+//     sender: 'user',
+//     timestamp: new Date()
+//   };
+
+//   setMessages(prev => [...prev, newUserMessage]);
+//   setReplyText('');
+//   setIsTyping(true);
+
+//   try {
+//     const response = await fetch('http://localhost:8000/api/ping', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ message: trimmedInput }),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Failed to fetch response from server');
+//     }
+
+//     const data = await response.json();
+
+//     const aiResponse: ChatMessage = {
+//       text: data.message,
+//       sender: 'ai',
+//       timestamp: new Date(),
+//     };
+
+//     setMessages(prev => [...prev, aiResponse]);
+//   } catch (error) {
+//     console.error('Error sending message:', error);
+//     const fallbackResponse: ChatMessage = {
+//       text: "Sorry, something went wrong contacting the server.",
+//       sender: 'ai',
+//       timestamp: new Date()
+//     };
+//     setMessages(prev => [...prev, fallbackResponse]);
+//   } finally {
+//     setIsTyping(false);
+//   }
+// };
 
   // Start the Li Wei conversation
   const startLiWeiConversation = () => {

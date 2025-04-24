@@ -41,7 +41,12 @@ class PingPayload(BaseModel):
 async def ping(payload: PingPayload):
     print(f"Received: {payload.message}")
 
-    return {"message": get_me_a_completion(payload.message)}
+    completion = get_me_a_completion(payload.message)
+
+    if completion == "":
+        raise Exception("it gave us nothing")
+
+    return {"message": completion}
 
 
 
@@ -67,7 +72,7 @@ def get_me_a_completion(message: str):
     completion: ChatCompletion = client.chat.completions.create(  
         model=deployment,
         messages=messages,
-        max_completion_tokens=4000,
+        max_completion_tokens=1000,
         stop=None,  
         stream=False,
     )
@@ -78,6 +83,7 @@ def get_me_a_completion(message: str):
 
     })
 
+    print(completion.choices[0].message.content)
     return str(completion.choices[0].message.content)
 
 
