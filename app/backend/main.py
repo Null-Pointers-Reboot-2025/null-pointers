@@ -10,16 +10,17 @@ with open("system_prompt.txt", "r", encoding="UTF-8") as f:
     system_prompt = f.read()
 
 
+
 CONVERSATION = [
         {
             "role": "system",
-            "content": "system_prompt"
+            "content": system_prompt
         },
 ]
 
 
 endpoint = os.getenv("ENDPOINT_URL")  
-deployment = "o1"
+deployment = "4o"
 subscription_key = os.getenv("AZURE_OPENAI_API_KEY")  
 
 app = FastAPI()
@@ -68,7 +69,7 @@ def get_me_a_completion(message: str):
         messages=messages,
         max_completion_tokens=4000,
         stop=None,  
-        stream=False
+        stream=False,
     )
 
     CONVERSATION.append({
