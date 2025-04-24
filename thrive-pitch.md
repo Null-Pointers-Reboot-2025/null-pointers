@@ -14,16 +14,6 @@ By integrating wellness tools, financial advice, and life coaching into a unifie
 
 ---
 
-## ✅ Strengths of the Solution
-
-- **Human-centered agentic AI**: Inspired by how real guides support people — with perception, empathy, adaptability, and pacing.
-- **Unified experience**: Connects wellness, finances, and daily life admin into one intelligent interface.
-- **Emotionally intelligent**: Responds to mood, stress, and recent history to modulate the type, tone, and intensity of tasks.
-- **Truly personalised**: Understands not just goals, but also energy levels, habits, and personal values.
-- **Scalable tech foundation**: Powered by Azure infrastructure, real-time data streams, and LLM-driven planning logic.
-
----
-
 ## 📖 Real-World Example: Ahmed's Journey
 
 Meet Ahmed, a 26-year-old ICU nurse in Manchester working rotating night shifts. Like many young adults, Ahmed faces unique challenges in maintaining his wellbeing:
@@ -62,6 +52,16 @@ Understanding Ahmed's concerns about data privacy, Thrive:
 - Felt more in control of his wellbeing
 
 Ahmed's story demonstrates how Thrive adapts to any young adult's unique circumstances, providing personalized support that evolves with their needs and lifestyle.
+
+---
+
+## ✅ Strengths of the Solution
+
+- **Human-centered agentic AI**: Inspired by how real guides support people — with perception, empathy, adaptability, and pacing.
+- **Unified experience**: Connects wellness, finances, and daily life admin into one intelligent interface.
+- **Emotionally intelligent**: Responds to mood, stress, and recent history to modulate the type, tone, and intensity of tasks.
+- **Truly personalised**: Understands not just goals, but also energy levels, habits, and personal values.
+- **Scalable tech foundation**: Powered by Azure infrastructure, real-time data streams, and LLM-driven planning logic.
 
 ---
 
