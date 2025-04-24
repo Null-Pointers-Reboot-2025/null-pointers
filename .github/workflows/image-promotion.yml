@@ -1,0 +1,63 @@
+name: Promote Images from Dev to Prod
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: 'Commit SHA to promote from dev to prod'
+        required: true
+      
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  promote-images:
+    runs-on: ubuntu-latest
+    environment: prod  # Enables manual approval
+    
+    steps:
+      - name: Azure login (OIDC)
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      
+      - name: Download image digests
+        uses: actions/download-artifact@v4
+        with:
+          name: image-digests-${{ github.event.inputs.commit_sha }}
+          path: .
+          
+      - name: Import all images to Prod ACR
+        run: |
+          # Read the digests.json file
+          DIGESTS=$(cat digests.json)
+          
+          # Get all service names from the json keys
+          SERVICES=$(echo $DIGESTS | jq -r 'keys[]')
+          
+          echo "Found services: $SERVICES"
+          
+          # Loop through all services automatically
+          for SERVICE in $SERVICES; do
+            # Get the digest for this service
+            DIGEST=$(echo $DIGESTS | jq -r ".$SERVICE")
+            
+            echo "Importing $SERVICE with digest $DIGEST"
+            
+            # Import to prod ACR
+            az acr import \
+              --name ${{ vars.ACR_NAME }} \
+              --source ${{ vars.DEV_ACR_NAME }}.azurecr.io/$SERVICE@$DIGEST \
+              --image $SERVICE:${{ github.event.inputs.commit_sha }}
+              
+            echo "$SERVICE image imported successfully"
+          done
+      
+      - name: Trigger Prod Deployment
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          event-type: deployment  # Changed from prod-deployment
+          client-payload: '{"environment": "prod", "commit_sha": "${{ github.event.inputs.commit_sha }}"}'

@@ -1,0 +1,65 @@
+# .github/workflows/cd-trigger.yml
+name: CD – Trigger Application Deployment
+
+permissions: { contents: read, id-token: write }
+
+on:
+  workflow_run:
+    workflows: ["CI – Build, Test, Scan"]
+    types: [completed]
+    branches: [main]
+    conclusions: [success]
+  repository_dispatch:
+    types: [deployment]
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      # Determine the commit SHA to use
+      - id: determine-sha
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+            echo "commit_sha=${{ github.event.workflow_run.head_sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "commit_sha=${{ github.event.client_payload.commit_sha }}" >> "$GITHUB_OUTPUT"
+          fi
+      
+      # Download the digests artifact
+      - uses: actions/download-artifact@v4
+        with:
+          name: image-digests-${{ steps.determine-sha.outputs.commit_sha }}
+          path: .
+      
+      # Upload the digests.json as an artifact for the deployment workflow
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deployment-digests
+          path: digests.json
+          retention-days: 1  # Short retention since it's just for passing between jobs
+      
+      # Determine environment parameters
+      - id: params
+        run: |
+          ENV="${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment || 'dev' }}"
+          echo "environment=$ENV" >> "$GITHUB_OUTPUT"
+          echo "tf_vars_file=infra/app/env/$ENV.app.tfvars" >> "$GITHUB_OUTPUT"
+          echo "git_ref=${{ steps.determine-sha.outputs.commit_sha }}" >> "$GITHUB_OUTPUT"
+    
+    outputs:
+      environment: ${{ steps.params.outputs.environment }}
+      tf_vars_file: ${{ steps.params.outputs.tf_vars_file }}
+      git_ref: ${{ steps.params.outputs.git_ref }}
+
+  deploy:
+    needs: prepare
+    uses: ./.github/workflows/cd-deploy.yml
+    with:
+      environment: ${{ needs.prepare.outputs.environment }}
+      tf_vars_file: ${{ needs.prepare.outputs.tf_vars_file }}
+      project_prefix: hackapp
+      resource_group_name: Team25
+      run_canary: ${{ needs.prepare.outputs.environment == 'prod' }}
+      git_ref: ${{ needs.prepare.outputs.git_ref }}
+      # No more individual service digests - we'll pass the file instead
+    secrets: inherit
