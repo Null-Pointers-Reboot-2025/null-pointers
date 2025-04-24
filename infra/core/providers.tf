@@ -17,6 +17,7 @@ terraform {
 }
 
 provider "azurerm" {
+  resource_provider_registrations = "none"
   features {}
 
   # Configure OIDC authentication for GitHub Actions
@@ -28,7 +29,6 @@ provider "azurerm" {
   tenant_id       = "" # Required attribute, but value sourced from ARM_TENANT_ID env var
   subscription_id = "" # Required attribute, but value sourced from ARM_SUBSCRIPTION_ID env var
   oidc_token      = "" # Explicitly use OIDC token sourced from ARM_OIDC_TOKEN env var
-  resource_provider_registrations = "none"
 }
 
 # No specific provider block needed for azurecaf unless customizing its behavior
