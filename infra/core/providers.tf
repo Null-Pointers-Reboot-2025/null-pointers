@@ -17,7 +17,7 @@ terraform {
 }
 
 provider "azurerm" {
-  resource_provider_registrations = "none"
+  skip_provider_registration = "none"
   features {}
 
   # Configure OIDC authentication for GitHub Actions
