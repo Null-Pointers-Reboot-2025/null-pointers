@@ -6,7 +6,7 @@ data "azurerm_resource_group" "core" {
 }
 
 data "azurerm_container_registry" "acr" {
-  name                = "acr${var.project_prefix}${var.environment}"
+  name                = "cr${var.project_prefix}${var.environment}123"
   resource_group_name = data.azurerm_resource_group.core.name
 }
 

@@ -16,7 +16,7 @@ resource "azurecaf_name" "acr" {
   resource_type = "azurerm_container_registry"
 
   # prefixes = ["acr"] # Rely on resource_type for prefix
-  suffixes  = [var.environment]     # ACR names must be globally unique
+  suffixes  = [var.environment, 123]     # ACR names must be globally unique
   separator = ""
   clean_input = true
 }
